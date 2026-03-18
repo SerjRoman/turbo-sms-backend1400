@@ -1,0 +1,9 @@
+import { cleanEnv, num, str } from "envalid";
+import { config } from "dotenv";
+config();
+
+export const env = cleanEnv(process.env, {
+	PORT: num({ default: 8000 }),
+	HOST: str({ default: "localhost" }),
+	DATABASE_URL: str(),
+});

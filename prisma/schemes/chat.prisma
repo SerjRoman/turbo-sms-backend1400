@@ -1,0 +1,9 @@
+model Chat {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//  messages Message[]
+//  lastMessage Message
+//  participants ChatParticipant
