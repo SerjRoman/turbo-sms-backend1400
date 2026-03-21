@@ -2,8 +2,8 @@ model Contact {
   id            Int      @id @default(autoincrement())
   localName     String
   addedAt       DateTime @default(now())
-  contactUser User @relation(fields: [contactUserId], references: [id])
+  contactUser User @relation(name: "ContactOf",fields: [contactUserId], references: [id])
   contactUserId Int
-  owner User @relation(fields: [ownerId], references: [id])
+  owner User @relation(name: "ContactToOwner",fields: [ownerId], references: [id])
   ownerId       Int
 }

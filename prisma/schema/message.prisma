@@ -3,11 +3,14 @@ model Message {
   type      String
   text      String?
   mediaUrl  String?
-  sender User @relation(fields: [senderId], references: [id])
+  sender User @relation("senderMessages",fields: [senderId], references: [id])
   senderId  Int
-  // chatAsLastMessage 
-  chat Chat @relation(fields: [chatId], references: [id])
+  chat Chat @relation("messageChat",fields: [chatId], references: [id])
   chatId    Int
+  chatId1    Int
+  
+  chatAsLastMessage  Chat? @relation("lastMessage")
+  chatAsLastMessageId Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
