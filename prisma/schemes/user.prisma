@@ -1,12 +1,16 @@
 model User {
-  id         Int      @id @default(autoincrement())
-  name       String
-  surname    String
-  avatar     String
-  lastSeenAt DateTime
-  password   String
-  username   String   @unique
-  email      String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id            Int               @id @default(autoincrement())
+  name          String
+  surname       String
+  avatar        String
+  lastSeenAt    DateTime
+  password      String
+  username      String            @unique
+  email         String            @unique
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  contacts      Contact[]         @relation(name: "ContactOwnerToUser")
+  contactsOf    Contact[]         @relation(name: "ContactUserToUser")
+  participating ChatParticipant[]
+  messages      Message[]
 }

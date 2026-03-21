@@ -1,10 +1,16 @@
 model Message {
-  id        Int      @id @default(autoincrement())
-  type      String
-  text      String?
-  mediaUrl  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  type       String
+  text       String?
+  mediaUrl   String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  chat       Chat     @relation(fields: [chatId], references: [id], name: "mainChat")
+  chatId     Int
+  lastChat   Chat     @relation(fields: [lastChatId], references: [id], name: "messageLast")
+  lastChatId Int      @unique
+  sender     User     @relation(fields: [senderId], references: [id])
+  senderId   Int
 }
 
 // sendler 
