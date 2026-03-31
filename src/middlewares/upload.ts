@@ -36,3 +36,5 @@ export function processImageMiddleware(size: number, quality: number = 50) {
 		}
 	};
 }
+
+
