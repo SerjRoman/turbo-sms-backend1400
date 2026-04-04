@@ -1,16 +1,6 @@
 import { type Prisma } from "../../../generated/prisma";
 import { type InferType } from "yup";
 import { loginSchema, regSchema } from "../user.schema";
-/*
-
-type User = Prisma.UserGetPayload<{}>
-type UserRelations 
-
-interface User {
-    email: ....
-}
-
-*/
 
 export type User = Prisma.UserGetPayload<{
 	omit: {

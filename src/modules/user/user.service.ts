@@ -1,11 +1,14 @@
 import { UserService as ServiceContract } from "./types/user.contracts";
 import { UserRepository } from "./user.repository";
 import { hash, compare } from "bcryptjs";
-import { NotFoundError, AuthenticationError } from "@errors/";
 import { sign } from "jsonwebtoken";
 import { env } from "../../config/env";
-import { ConflictError } from "../../errors";
 import { CreateUserPayload } from "./types/user.types";
+import {
+	NotFoundError,
+	AuthenticationError,
+	ConflictError,
+} from "@errors/app.errors";
 
 export const UserService: ServiceContract = {
 	login: async (credentials) => {

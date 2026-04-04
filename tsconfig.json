@@ -39,11 +39,12 @@
 		"noUncheckedSideEffectImports": true,
 		"moduleDetection": "force",
 		"skipLibCheck": true,
+		"baseUrl": "./",
 		"paths": {
-			"@middlewares/*": ["./middlewares/*"],
-			"@config/*": ["./config/*"],
-			"@types/*": ["./types/*"],
-			"@errors/*": ["./errors/*"],
+			"@middlewares/*": ["./src/middlewares/*"],
+			"@config/*": ["./src/config/*"],
+			"@app-types/*": ["./src/types/*"],
+			"@errors/*": ["./src/errors/*"]
 		}
 	}
 }

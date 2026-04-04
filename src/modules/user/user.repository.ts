@@ -1,8 +1,9 @@
-import { PrismaErrorCodes, ErrorCodes } from "types/error-codes";
 import { PrismaClient } from "../../generated/prisma";
 import type { UserRepository as RepoContract } from "./types/user.contracts";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { User } from "./types/user.types";
+import { PrismaErrorCodes } from "@app-types/error-codes";
+import { InternalServerError, NotFoundError } from "@errors/app.errors";
 
 const Client = new PrismaClient();
 
@@ -18,15 +19,15 @@ export const UserRepository: RepoContract = {
 			if (error instanceof PrismaClientKnownRequestError) {
 				switch (error.code) {
 					case PrismaErrorCodes.NOT_EXIST:
-						throw new Error(ErrorCodes.NOT_FOUND);
+						throw new NotFoundError("User");
 					default:
-						throw new Error(ErrorCodes.UNHANDLED);
+						throw new InternalServerError();
 				}
 			}
 			if (error instanceof Error) {
-				throw new Error(error.message);
+				throw new InternalServerError(error.message);
 			}
-			throw new Error(ErrorCodes.UNHANDLED);
+			throw new InternalServerError();
 		}
 	},
 	async findByUsername(username) {
@@ -40,15 +41,15 @@ export const UserRepository: RepoContract = {
 			if (error instanceof PrismaClientKnownRequestError) {
 				switch (error.code) {
 					case PrismaErrorCodes.NOT_EXIST:
-						throw new Error(ErrorCodes.NOT_FOUND);
+						throw new NotFoundError("User");
 					default:
-						throw new Error(ErrorCodes.UNHANDLED);
+						throw new InternalServerError();
 				}
 			}
 			if (error instanceof Error) {
-				throw new Error(error.message);
+				throw new InternalServerError(error.message);
 			}
-			throw new Error(ErrorCodes.UNHANDLED);
+			throw new InternalServerError();
 		}
 	},
 	async findByIdWithPassword(id) {
@@ -61,15 +62,15 @@ export const UserRepository: RepoContract = {
 			if (error instanceof PrismaClientKnownRequestError) {
 				switch (error.code) {
 					case PrismaErrorCodes.NOT_EXIST:
-						throw new Error(ErrorCodes.NOT_FOUND);
+						throw new NotFoundError("User");
 					default:
-						throw new Error(ErrorCodes.UNHANDLED);
+						throw new InternalServerError();
 				}
 			}
 			if (error instanceof Error) {
-				throw new Error(error.message);
+				throw new InternalServerError(error.message);
 			}
-			throw new Error(ErrorCodes.UNHANDLED);
+			throw new InternalServerError();
 		}
 	},
 	async create(data) {
@@ -82,17 +83,15 @@ export const UserRepository: RepoContract = {
 			if (error instanceof PrismaClientKnownRequestError) {
 				switch (error.code) {
 					case PrismaErrorCodes.NOT_EXIST:
-						throw new Error(ErrorCodes.NOT_FOUND);
-					case PrismaErrorCodes.UNIQUE:
-						throw new Error(ErrorCodes.EXISTS);
+						throw new NotFoundError("User");
 					default:
-						throw new Error("UNHANDLED");
+						throw new InternalServerError();
 				}
 			}
 			if (error instanceof Error) {
-				throw new Error(error.message);
+				throw new InternalServerError(error.message);
 			}
-			throw new Error(ErrorCodes.UNHANDLED);
+			throw new InternalServerError();
 		}
 	},
 	findById: function (id: number): Promise<User | null> {

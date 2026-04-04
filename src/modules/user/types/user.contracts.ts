@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import type {
 	CreateUserPayload,
 	LoginCredentials,
@@ -8,7 +8,7 @@ import type {
 	User,
 	UserWithPassword,
 } from "./user.types";
-import { TokenPayload } from "@types/token";
+import { AuthenticatedUser, TokenPayload } from "@app-types/token";
 
 export interface UserService {
 	login: (credentials: LoginCredentials) => Promise<TokenDTO>;
@@ -27,13 +27,16 @@ export interface UserController {
 	login: (
 		req: Request<object, TokenDTO, LoginCredentials>,
 		res: Response<TokenDTO>,
+		next: NextFunction,
 	) => void;
 	register: (
 		req: Request<object, TokenDTO, RegisterCredentials>,
 		res: Response<TokenDTO>,
+		next: NextFunction,
 	) => void;
 	me: (
-		req: Request<object, object, object, object, TokenPayload>,
-		res: Response<User, TokenPayload>,
+		req: Request<object, object, object, object, AuthenticatedUser>,
+		res: Response<User, AuthenticatedUser>,
+		next: NextFunction,
 	) => void;
 }
