@@ -1,10 +1,11 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AppError } from "../errors/app.errors";
 
 export function errorHandlerMiddleware(
 	error: Error,
 	req: Request,
 	res: Response,
+	next: NextFunction,
 ) {
 	console.error(error);
 

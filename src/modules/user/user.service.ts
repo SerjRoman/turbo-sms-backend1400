@@ -11,14 +11,12 @@ import { sign } from "jsonwebtoken";
 import { env } from "../../config/env";
 
 export const UserService: UserServiceContract = {
-	async login(credentials) {
-		const user = await UserRepository.findByEmailWithPassword(
-			credentials.email,
-		);
+	async login(dto) {
+		const user = await UserRepository.findByEmailWithPassword(dto.email);
 		if (!user) {
 			throw new NotFoundError("User");
 		}
-		const isMatched = await compare(credentials.password, user.password);
+		const isMatched = await compare(dto.password, user.password);
 		if (!isMatched) {
 			throw new AuthenticationError("Passwords do not match");
 		}
@@ -28,18 +26,16 @@ export const UserService: UserServiceContract = {
 
 		return { token };
 	},
-	async register(credentials, avatar) {
-		const existingUser = await UserRepository.findByEmail(
-			credentials.email,
-		);
+	async register(dto) {
+		const existingUser = await UserRepository.findByEmail(dto.email);
 		if (existingUser) {
 			throw new ConflictError("User with such email");
 		}
-		const hashedPassword = await hash(credentials.password, 10);
+		const hashedPassword = await hash(dto.password, 10);
 		const createdUser = await UserRepository.create({
-			...credentials,
+			...dto,
 			password: hashedPassword,
-			avatar,
+			avatar: dto.avatar || null,
 		});
 		const token = sign({ id: createdUser.id }, env.SECRET_KEY, {
 			expiresIn: env.TOKEN_TTL as StringValue,

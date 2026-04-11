@@ -5,7 +5,7 @@ import { ValidationError } from "../errors/app.errors";
 export function validateMiddleware(schema: AnySchema) {
 	return async function (req: Request, res: Response, next: NextFunction) {
 		try {
-			const validated = schema.validate(req.body, {
+			const validated = await schema.validate(req.body, {
 				abortEarly: false,
 				stripUnknown: true,
 			});
@@ -13,7 +13,14 @@ export function validateMiddleware(schema: AnySchema) {
 			next();
 		} catch (error) {
 			if (error instanceof YupValidationError) {
-				next(new ValidationError(error.message));
+				next(
+					new ValidationError(
+						error.inner.reduce(
+							(prev, current) => prev + " " + current,
+							"",
+						),
+					),
+				);
 				return;
 			}
 			next(error);

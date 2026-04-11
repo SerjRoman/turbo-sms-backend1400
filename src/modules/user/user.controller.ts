@@ -7,7 +7,6 @@ import {
 	User,
 } from "./types/user.types";
 import { UserService } from "./user.service";
-import { ValidationError } from "yup";
 
 export const UserController: UserControllerContract = {
 	login: async function (
@@ -28,13 +27,10 @@ export const UserController: UserControllerContract = {
 		next,
 	) {
 		try {
-			if (!req.file) {
-				throw new ValidationError("There is no profile icon!");
-			}
-			const token = await UserService.register(
-				req.body,
-				req.file.filename,
-			);
+			const token = await UserService.register({
+				...req.body,
+				avatar: req.file?.filename,
+			});
 			res.status(201).json(token);
 		} catch (error) {
 			next(error);

@@ -17,9 +17,9 @@ UserRoutes.post(
 );
 UserRoutes.post(
 	"/register",
-	validateMiddleware(regSchema),
 	uploadMiddleware.single("avatar"),
-	processImageMiddleware(200, 80),
+	validateMiddleware(regSchema),
+	processImageMiddleware(false, 200, 80),
 	UserController.register,
 );
 UserRoutes.get("/me", authenticateMiddleware, UserController.me);

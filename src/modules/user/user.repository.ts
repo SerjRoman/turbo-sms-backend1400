@@ -8,7 +8,6 @@ import { PrismaClient } from "../../prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
 import { ValidationError, InternalServerError } from "../../errors/app.errors";
 
-
 export const UserRepository: UserRepositoryContract = {
 	async findByEmailWithPassword(
 		email: string,
@@ -95,7 +94,7 @@ export const UserRepository: UserRepositoryContract = {
 	},
 	async findById(id: number): Promise<User> {
 		try {
-            // Unsure if error handling will work without await
+			// Unsure if error handling will work without await
 			return await PrismaClient.user.findFirstOrThrow({
 				where: { id },
 				omit: {
