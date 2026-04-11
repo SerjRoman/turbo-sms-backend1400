@@ -12,6 +12,16 @@ export type CreateUserPayload = Prisma.UserUncheckedCreateInput;
 
 export type UserWithPassword = Prisma.UserGetPayload<{}>;
 // DTO -> Data Transfer Object
+
+export type RegisterDto = {
+	email: string;
+	password: string;
+	name: string;
+	surname: string;
+	username: string;
+	avatar?: string | undefined;
+};
+
 export type LoginCredentials = InferType<typeof loginSchema>;
 export type RegisterCredentials = InferType<typeof regSchema>;
 

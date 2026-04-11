@@ -8,6 +8,8 @@ import { uploadDir } from "../config/path";
 const app: Express = express();
 app.use(cors({ origin: "" }));
 app.use(logMiddleware);
+app.use(express.json())
+
 app.use(router);
 
 app.use(errorMiddleware);

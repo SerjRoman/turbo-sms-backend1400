@@ -6,6 +6,7 @@ import type {
 	RegisterCredentials,
 } from "./types/user.types";
 import { UserService } from "./user.service";
+import { ValidationError } from "@errors/app.errors";
 
 export const UserController: UserControllerContract = {
 	login: async function (
@@ -26,7 +27,10 @@ export const UserController: UserControllerContract = {
 		next,
 	) {
 		try {
-			const token = await UserService.register(req.body);
+			const token = await UserService.register({
+				...req.body,
+				avatar: req.file?.filename,
+			});
 			res.status(200).json(token);
 		} catch (error) {
 			next(error);

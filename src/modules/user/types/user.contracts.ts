@@ -4,15 +4,16 @@ import type {
 	LoginCredentials,
 	MeDTO,
 	RegisterCredentials,
+	RegisterDto,
 	TokenDTO,
 	User,
 	UserWithPassword,
 } from "./user.types";
-import { AuthenticatedUser, TokenPayload } from "@app-types/token";
+import { AuthenticatedUser } from "@app-types/token";
 
 export interface UserService {
 	login: (credentials: LoginCredentials) => Promise<TokenDTO>;
-	register: (credentials: RegisterCredentials) => Promise<TokenDTO>;
+	register: (dto: RegisterDto) => Promise<TokenDTO>;
 	me: (DTO: MeDTO) => Promise<User>;
 }
 export interface UserRepository {

@@ -7,14 +7,23 @@ import sharp from "sharp";
 
 export const uploadMiddleware = multer({ storage: memoryStorage() });
 
-export function processImageMiddleware(size: number, quality: number = 50) {
+export function processImageMiddleware(
+	isRequired: boolean,
+	size: number,
+	quality: number = 50,
+) {
 	return async function (req: Request, res: Response, next: NextFunction) {
 		try {
 			const file = req.file;
 			if (!file) {
-				next(new BadRequestError("File was not loaded"));
+				if (isRequired)
+					next(new BadRequestError("File was not loaded"));
+				else {
+					next();
+				}
 				return;
 			}
+
 			const filename = Date.now() + ".jpeg";
 			const originalFilePath = join(originalDir, filename);
 			const thumbnailFilePath = join(thumbnailDir, filename);
@@ -36,5 +45,3 @@ export function processImageMiddleware(size: number, quality: number = 50) {
 		}
 	};
 }
-
-
