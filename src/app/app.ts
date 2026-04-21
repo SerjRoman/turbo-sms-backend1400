@@ -12,6 +12,8 @@ app.use(express.json())
 
 app.use(router);
 
+app.use('/media', express.static(path.join(__dirname, 'media')));
+
 app.use(errorMiddleware);
 console.log(uploadDir);
 app.listen(env.PORT, env.HOST, () => {

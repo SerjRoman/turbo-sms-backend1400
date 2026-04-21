@@ -27,6 +27,7 @@ export const UserController: UserControllerContract = {
 		next,
 	) {
 		try {
+			console.log(req.file);
 			const token = await UserService.register({
 				...req.body,
 				avatar: req.file?.filename,

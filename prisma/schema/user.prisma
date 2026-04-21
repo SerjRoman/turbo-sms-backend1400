@@ -1,14 +1,14 @@
 model User {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique
-  name       String
-  surname    String
-  avatar     String?
-  lastSeenAt DateTime   @default(now())
-  password   String
-  email      String     @unique
-  contacts   Contact[] @relation("ContactToOwner")
-  contactOf Contact[] @relation("ContactOf")
-  santMessages Message[] @relation("senderMessages")
-  chats ChatParticipant[] @relation("participants")
+  id           Int               @id @default(autoincrement())
+  username     String            @unique
+  name         String
+  surname      String
+  avatar       String?
+  lastSeenAt   DateTime          @default(now())
+  password     String
+  email        String            @unique
+  contacts     Contact[]         @relation("ContactToOwner")
+  contactOf    Contact[]         @relation("ContactOf")
+  santMessages Message[]         @relation("senderMessages")
+  chats        ChatParticipant[] @relation("participants")
 }

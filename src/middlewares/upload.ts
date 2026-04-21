@@ -15,6 +15,7 @@ export function processImageMiddleware(
 	return async function (req: Request, res: Response, next: NextFunction) {
 		try {
 			const file = req.file;
+            console.log(file)
 			if (!file) {
 				if (isRequired)
 					next(new BadRequestError("File was not loaded"));
