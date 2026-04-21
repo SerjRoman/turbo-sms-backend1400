@@ -11,8 +11,8 @@ app.use(logMiddleware);
 app.use(express.json())
 
 app.use(router);
-
-app.use('/media', express.static(path.join(__dirname, 'media')));
+// Потом указать правильную директорию после гена медиа папки
+app.use('/thumbnail', express.static(path.join(__dirname, 'media')));
 
 app.use(errorMiddleware);
 console.log(uploadDir);
