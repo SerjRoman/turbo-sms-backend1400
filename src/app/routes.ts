@@ -4,6 +4,7 @@ import {
 	uploadMiddleware,
 } from "../middlewares/upload.middleware";
 import { UserRoutes } from "../modules/user/user.routes";
+import { authenticateMiddleware } from "../middlewares/authenticate.middleware";
 
 export const appRoutes = Router();
 
@@ -26,3 +27,20 @@ appRoutes.post(
 		});
 	},
 );
+
+appRoutes.use("/contacts", authenticateMiddleware, ContactRoutes);
+appRoutes.get("/me", authenticateMiddleware, (req, res) => {
+	res.json({
+		id: req.user?.id,
+		username: req.user?.username,
+		email: req.user?.email,
+		avatar: req.user?.avatar,
+	})
+});
+
+appRoutes.use("*", (req, res) => {
+	res.status(404).json({
+		message: "Not Found",
+		error: "404",
+	})
+});

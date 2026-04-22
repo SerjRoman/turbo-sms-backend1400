@@ -119,4 +119,23 @@ export const UserRepository: UserRepositoryContract = {
 			throw new InternalServerError("UNHANDLED_DB_EXCEPTION");
 		}
 	},
+
+	async findByUsername(username: string): Promise<User | null> {
+		try {
+			return await PrismaClient.user.findFirst({
+				where: { username },
+				omit: { password: true },
+			});
+		} catch (error) {
+			if (error instanceof PrismaClientKnownRequestError) {
+				if (["P2000", "P2005", "P2006", "P2007", "P2009"].includes(error.code)) {
+					throw new ValidationError("WRONG_QUERY");
+				}
+				if (error.code === "P2022") {
+					throw new InternalServerError("WRONG_DATABASE");
+				}
+			}
+			throw new InternalServerError("UNHANDLED_DB_EXCEPTION");
+		} 
+	}
 };

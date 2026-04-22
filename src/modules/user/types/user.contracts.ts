@@ -41,4 +41,9 @@ export interface UserControllerContract {
 		res: Response<User, AuthenticatedUser>,
 		next: NextFunction,
 	) => void;
+	findByUsername: (
+		req: Request<{ username;  string }, User, object, object, AuthenticatedUser>,
+		res: Response<User, AuthenticatedUser>,
+		next: NextFunctoin,
+	) => void;
 }
