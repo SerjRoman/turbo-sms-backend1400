@@ -31,3 +31,6 @@ export type MeDTO = {
 export type TokenDTO = {
 	token: string;
 };
+export type FindUserByUsernameDto = {
+	username: string;
+};

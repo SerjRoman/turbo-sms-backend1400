@@ -20,3 +20,8 @@ UserRouter.post(
 	UserController.register,
 );
 UserRouter.get("/me", authenticateMiddleware, UserController.me);
+UserRouter.get(
+	"/:username",
+	authenticateMiddleware,
+	UserController.findByUsername,
+);

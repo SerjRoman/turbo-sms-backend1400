@@ -3,7 +3,11 @@ import { UserRepository } from "./user.repository";
 import { hash, compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { env } from "../../config/env";
-import { CreateUserPayload } from "./types/user.types";
+import {
+	CreateUserPayload,
+	FindUserByUsernameDto,
+	User,
+} from "./types/user.types";
 import {
 	NotFoundError,
 	AuthenticationError,
@@ -62,6 +66,7 @@ export const UserService: ServiceContract = {
 		const userToCreate: CreateUserPayload = {
 			...credentials,
 			password: hashedPassword,
+			avatar: credentials.avatar || null,
 		};
 		const newUser = await UserRepository.create(userToCreate);
 		const token = sign(
@@ -75,8 +80,15 @@ export const UserService: ServiceContract = {
 		);
 		return { token };
 	},
-	me: async (DTO) => {
-		const user = await UserRepository.findById(DTO.userId);
+	me: async (dto) => {
+		const user = await UserRepository.findById(dto.userId);
+		if (!user) {
+			throw new NotFoundError("User");
+		}
+		return user;
+	},
+	findByUsername: async function (dto: FindUserByUsernameDto): Promise<User> {
+		const user = await UserRepository.findByUsername(dto.username);
 		if (!user) {
 			throw new NotFoundError("User");
 		}

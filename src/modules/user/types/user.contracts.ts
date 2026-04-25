@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import type {
 	CreateUserPayload,
+	FindUserByUsernameDto,
 	LoginCredentials,
 	MeDTO,
 	RegisterCredentials,
@@ -15,6 +16,7 @@ export interface UserService {
 	login: (credentials: LoginCredentials) => Promise<TokenDTO>;
 	register: (dto: RegisterDto) => Promise<TokenDTO>;
 	me: (DTO: MeDTO) => Promise<User>;
+	findByUsername: (dto: FindUserByUsernameDto) => Promise<User>;
 }
 export interface UserRepository {
 	findByEmail: (email: string) => Promise<User | null>;
@@ -37,6 +39,17 @@ export interface UserController {
 	) => void;
 	me: (
 		req: Request<object, object, object, object, AuthenticatedUser>,
+		res: Response<User, AuthenticatedUser>,
+		next: NextFunction,
+	) => void;
+	findByUsername: (
+		req: Request<
+			{ username: string },
+			object,
+			User,
+			object,
+			AuthenticatedUser
+		>,
 		res: Response<User, AuthenticatedUser>,
 		next: NextFunction,
 	) => void;

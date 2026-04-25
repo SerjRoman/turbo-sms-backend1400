@@ -9,4 +9,4 @@ router.get("/health", (req, res) => {
 
 router.use("/users/", UserRouter);
 
-router.use('/contacts/', ContactRouter, authenticateMiddleware)
+// router.use('/contacts/', ContactRouter, authenticateMiddleware)
