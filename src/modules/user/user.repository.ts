@@ -122,13 +122,18 @@ export const UserRepository: UserRepositoryContract = {
 
 	async findByUsername(username: string): Promise<User | null> {
 		try {
-			return await PrismaClient.user.findFirst({
+			return await PrismaClient.user.findUnique({
 				where: { username },
 				omit: { password: true },
 			});
 		} catch (error) {
+			console.log(error);
 			if (error instanceof PrismaClientKnownRequestError) {
-				if (["P2000", "P2005", "P2006", "P2007", "P2009"].includes(error.code)) {
+				if (
+					["P2000", "P2005", "P2006", "P2007", "P2009"].includes(
+						error.code,
+					)
+				) {
 					throw new ValidationError("WRONG_QUERY");
 				}
 				if (error.code === "P2022") {
@@ -136,6 +141,6 @@ export const UserRepository: UserRepositoryContract = {
 				}
 			}
 			throw new InternalServerError("UNHANDLED_DB_EXCEPTION");
-		} 
-	}
+		}
+	},
 };
