@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { Contact, CreationDTO, ShortContact, userIdLocals } from "./contact.types";
+import { Contact, CreateContactDto, CreationDTO, ShortContact, userIdLocals } from "./contact.types";
 
 
 export interface ContactsControllerContract{
@@ -28,10 +28,10 @@ export interface ContactsServiceContract{
 		ownerId: number
 	)=> Promise<Contact>;
 
-    create: (localName: string) => Promise<Contact>
+    create: (data: CreateContactDto) => Promise<Contact>;
 }
 export interface ContactsRepositoryContract{
     findAllByOwner: ( ownerId: number ) => Promise<Contact[]>
-    findById: ( id: number, owner: number ) => Promise<Contact>;
-    create: ( data: CreationDTO ) => Promise<Contact>
+    findById: (id: number, ownerId: number) => Promise<Contact | null>;
+    create: (data: CreateContactDto) => Promise<Contact>;
 }

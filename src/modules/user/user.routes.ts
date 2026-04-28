@@ -14,9 +14,9 @@ UserRouter.post(
 );
 UserRouter.post(
 	"/register",
-	uploadMiddleware.single("avatar"),
+	// uploadMiddleware.single("avatar"),
 	validateMiddleware(regSchema),
-	processImageMiddleware(false, 400, 80),
+	// processImageMiddleware(false, 400, 80),
 	UserController.register,
 );
 UserRouter.get("/me", authenticateMiddleware, UserController.me);
