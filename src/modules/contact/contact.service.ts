@@ -1,30 +1,32 @@
-// import { ContactsServiceContract } from "./types/contact.contracts";
-// import { contactRepository } from './contact.repository'
+import { ContactsServiceContract } from "./types/contact.contracts";
+import { contactRepository } from './contact.repository';
+import { NotFoundError } from "@errors/app.errors";
 
-// export const ContactsService: ContactsServiceContract = {
-//     async getAll(userId) {
-//         const contacts = await contactRepository.findAllByOwner(userId)
-//         if (!Array.isArray(contacts)){
-//             throw Error('napishite potom')
-//         }
-//         return contacts
-//     },
-//     async getContactById(id, ownerId) {
-//         const contract = await contactRepository.findById(id , own);
+export const ContactsService: ContactsServiceContract = {
+    async getAll(userId: number) {
+        const contacts = await contactRepository.findAllByOwner(userId);
+        return contacts;
+    },
 
-//      if (!contract) {
-//       throw new Error('Contact not found');
-//     }
+    async getContactById(id: number, ownerId: number) {
+        const contact = await contactRepository.findById(id);
 
-//     return contract;
-//     },
+        if (!contact || contact.ownerId !== ownerId) {
+            throw new NotFoundError('Контакт не найден');
+        }
 
+        return contact;
+    },
 
-//    async create(localName) {
-//         const contact = await contactRepository.create({
-//             localName: localName
-//         });
+    async create(data) {
+        return await contactRepository.create(data);
+    },
 
-//         return contact;
-//    }
-// }
+    async findUserByUsername(username: string) {
+        const user = await contactRepository.findUserByUsername(username);
+        if (!user) {
+            throw new NotFoundError('Пользователь не найден');
+        }
+        return user;
+    }
+};
