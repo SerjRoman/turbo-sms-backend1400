@@ -11,7 +11,6 @@ export const ContactsService: ContactsServiceContract = {
     async getContactById(id: number, ownerId: number) {
         const contact = await contactRepository.findById(id);
 
-        // Если контакт не найден или он принадлежит не текущему пользователю
         if (!contact || contact.ownerId !== ownerId) {
             throw new NotFoundError('Контакт не найден');
         }

@@ -33,9 +33,6 @@ export const ContactsController: ContactsControllerContract = {
         try {
             const { localName, contactUserId } = req.body;
             
-            // Если в FormData пришел файл, берем его путь. 
-            // Если нет — берем аватар пользователя (из логики в задаче)
-            // Предполагается, что фото уже обработано миддлваром до 300x300
             const avatarPath = req.file ? req.file.path : res.locals.user.avatar;
 
             const contact = await ContactsService.create({
