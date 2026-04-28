@@ -1,42 +1,47 @@
-// import { PrismaClient } from "../../prisma/client"
-// import { CreateContact, UserContact } from "./types/contact.types"
-// import { ContactRepositoryContract } from "./types/contact.contract"
+import { PrismaClient, Prisma } from "@prisma/client";
+import { CreateContact } from "./types/contact.types";
+import { ContactRepositoryContract } from "./types/contact.contract";
+import { ConflictError, InternalServerError, ValidationError } from "../../errors/app.errors";
 
-// export const ContactRepository: ContactRepositoryContract = {
-//     async findAllbuOwnerI(ownerId: number): Promise<UserContact[]> {
-//         try {
-//             return await PrismaClient.contact.findMany({
-//                 where: { contactOwnerId: ownerId },
-//             });
-//         } catch (error) {
-//             if (error instanceof PrismaClientKnownRequestError) {
-// 				if (["P2000", "P2005", "P2006", "P2007", "P2009"].includes(error.code)) {
-// 					throw new ValidationError("WRONG_QUERY");
-// 				}
-// 				if (error.code === "P2022") {
-// 					throw new InternalServerError("WRONG_DATABASE");
-// 				}
-// 			}
-// 			throw new InternalServerError("UNHANDLED_DB_EXCEPTION");
-//         }
-//     },
+const prisma = new PrismaClient();
 
-//     async findById(id: number) {
-//         return await PrismaClient.contact.findUnique({
-//             where: {id},
-//             include: {
-//                 contactUser: {
-//                     select: {
-//                         username: true,
-//                         avatar: true
-//                     }
-//                 }
-//             }
-//         })
-//     },
+export const ContactRepository: ContactRepositoryContract = {
+    async findAll(ownerId: number) {
+        try {
+            return await prisma.contact.findMany({
+                where: { contactOwnerId: ownerId },
+            });
+        } catch (error) {
+            throw new InternalServerError("UNHANDLED_DB_EXCEPTION");
+        }
+    },
 
-//     async create(data: CreateContact){
-//         const createContac  await PrismaClient.contact.create({data})
-//         return createContact
-//     }
-// }
+    async findById(id: number) {
+        return await prisma.contact.findUnique({
+            where: { id },
+            include: {
+                contactUser: {
+                    select: {
+                        id: true,
+                        username: true,
+                        lastSeenAt: true,
+                    }
+                }
+            }
+        });
+    },
+
+    async create(data: CreateContact){
+        try {
+            const createContact = await prisma.contact.create({ data });
+            return createContact;
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                if (error.code === "P2002") {
+                    throw new ConflictError("CONTACT_ALREADY_EXISTS");
+                }
+            }
+            throw new InternalServerError("UNHANDLED_DB_EXCEPTION");
+        }
+    }
+};

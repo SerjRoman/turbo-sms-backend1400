@@ -1,41 +1,24 @@
-// import { ContactRepository } from "./contact.repository";
-// import { ContactsServiceContract } from "./types/contact.contracts";
-// import { NotFoundError } from "../../errors/app.errors";
-// import { CreateContact } from "./types/contact.types";
+import { ContactRepository } from "./contact.repository";
+import { ContactServiceContract } from "./types/contact.contract";
+import { NotFoundError } from "../../errors/app.errors";
+import { CreateContact } from "./types/contact.types";
 
+export const ContactService: ContactServiceContract = {
+    async findAll(ownerId: number){
+        return await ContactRepository.findAll(ownerId);
+    },
 
-// export const ContactService: ContactSetvo = {
-//     async getAll(userId: number){
-//         const contacts = await ContactRepository.findAll(userId)
-//         return contacts
-//     },
+    async findById(id: number, ownerId: number){
+        const contact = await ContactRepository.findById(id);
 
-//     async getContactById(id: number, ownerId: number){
-//         const contract = await ContractRepository.findById(id)
-//         if (!contact){
-//             throw new NotFoundError("Contact not found")
-//         }
-//         if (contact.contactOwnerId !== ownerId){
-//             throw new NotFoundError("Contact not found")
-//         }
-//         return contact
-//     }, 
+        if (!contact || contact.contactOwnerId !== ownerId){
+            throw new NotFoundError("Contact not found");
+        }
 
-//     async create(
-//         localName: string, 
-//         contractUserId: number,
-//         ownerId: number, 
-//         avatar?: string
-//     ){
-//         const data: CreateContact = {
-//             localName, 
-//             contactUserId,
-//             contactOwnerId: ownerId,
-//         }
-//         if (avatar){
-//             data.avatar = avatar
-//         }
-// 		const contact = await ContactRepository.create(data);
-// 		return contact;
-//     }
-// }
+        return contact;
+    },
+
+    async create(data: CreateContact){
+        return await ContactRepository.create(data);
+    }
+};
