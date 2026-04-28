@@ -1,25 +1,20 @@
-import { Prisma } from "../../../generated/prisma";
+import { Contact, Prisma } from "src/generated/prisma";
 
-export type Contact = Prisma.ContactGetPayload<{}>;
+export type ContactEntity = Contact;
 
-export type ShortContact = Prisma.ContactGetPayload<{
-	select: { localName: true; avatar: true };
-}>;
-
-export interface CreateContactServiceDto {
+export interface CreateContactDto {
 	localName: string;
-	avatar: string | null;
+	avatar?: string;
 	contactUserId: number;
 	ownerId: number;
 }
 
-export type CreateContact = Prisma.ContactUncheckedCreateInput;
-
 export type ContactWithUser = Prisma.ContactGetPayload<{
 	include: {
 		contactUser: {
-			omit: {
-				password: true;
+			select: {
+				username: true;
+				avatar: true;
 			};
 		};
 	};
