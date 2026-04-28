@@ -57,12 +57,9 @@ export const contactRepository:ContactsRepositoryContract = {
         }
     },
     async findUserByUsername(username, ownerId){
-        try{
+        try {
             return await PRISMA_CLIENT.contact.findUnique({
-                where:{
-                    localName: username,
-                    ownerId
-                },
+                where:{localName: username, ownerId},
                 include:{
                     contactUser:{
                         select:{
@@ -71,6 +68,7 @@ export const contactRepository:ContactsRepositoryContract = {
                             avatar:true
                         }
                     }
+                }
             })
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {

@@ -2,6 +2,7 @@ import { BadRequestError, ValidationError } from "@errors/app.errors";
 import type { ContactsControllerContract } from "./types/contact.contracts";
 import { ContactsService } from "./contact.service";
 
+// I need to change smth to do dit add
 export const ContactsController: ContactsControllerContract = {
     getAll: async function (req, res, next) {
 		try {
