@@ -1,9 +1,9 @@
-import { type Prisma } from "../../../generated/prisma";
+import { type Prisma } from '../../../generated/prisma';
 export type ContactEntity = Contact;
 
 export interface CreateContactDto {
     localName: string;
-    avatar?: string | undefined
+    avatar?: string | undefined;
     contactUserId: number;
 }
 
@@ -19,13 +19,16 @@ export interface ContactWithUser {
     createdAt: Date;
 }
 
+export type Contact = Prisma.ContactGetPayload<{}>;
 
-export type Contact = Prisma.ContactGetPayload<{}>
+export type ShortContact = Prisma.ContactGetPayload<{ select: { localName: true; avatar: true } }>;
 
-
-export type ShortContact = Prisma.ContactGetPayload<{select: {localName: true, avatar: true}}>
-
-export type CreationDTO = { localName: string, avatar?: string | null, contactUserId: string }
+export type CreationDTO = {
+    localName: string;
+    avatar?: string | null;
+    contactUserId: number;
+    ownerId: number;
+};
 
 export interface CreateContactServiceDto {
     localName: string;
@@ -40,4 +43,4 @@ export interface CreateContactRepoDto {
     contactUserId: number;
     ownerId: number;
 }
-export type userIdLocals = {userId: number}
+export type userIdLocals = { userId: number };
