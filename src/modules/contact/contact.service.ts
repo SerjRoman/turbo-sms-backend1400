@@ -1,30 +1,31 @@
-// import { ContactsServiceContract } from "./types/contact.contracts";
-// import { contactRepository } from './contact.repository'
+import { ContactsServiceContract } from "./types/contact.contracts";
+import { ContactRepository } from "./contact.repository";
 
-// export const ContactsService: ContactsServiceContract = {
-//     async getAll(userId) {
-//         const contacts = await contactRepository.findAllByOwner(userId)
-//         if (!Array.isArray(contacts)){
-//             throw Error('napishite potom')
-//         }
-//         return contacts
-//     },
-//     async getContactById(id, ownerId) {
-//         const contract = await contactRepository.findById(id , own);
+export const ContactsService: ContactsServiceContract = {
+	getAll: async (userId) => {
+		const contacts = await ContactRepository.findAllByOwner(userId);
 
-//      if (!contract) {
-//       throw new Error('Contact not found');
-//     }
-
-//     return contract;
-//     },
-
-
-//    async create(localName) {
-//         const contact = await contactRepository.create({
-//             localName: localName
-//         });
-
-//         return contact;
-//    }
-// }
+		return contacts;
+	},
+	getById: async (id, ownerId) => {
+		const contact = await ContactRepository.findById(id, ownerId);
+		return contact;
+	},
+	findUserByUsername: async (username) => {
+		const contact = await ContactRepository.findUserByUsername(username);
+		return contact;
+	},
+	create: async (data, userId) => {
+		console.log({
+			...data,
+			avatar: data.avatar || "default.jpg",
+			ownerId: userId,
+		});
+		const contact = await ContactRepository.create({
+			...data,
+			avatar: data.avatar || "default.jpg",
+			ownerId: userId,
+		});
+		return contact;
+	},
+};

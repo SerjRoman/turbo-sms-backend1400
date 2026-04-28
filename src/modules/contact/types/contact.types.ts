@@ -1,23 +1,17 @@
-// import { Contact, type Prisma } from "../../../generated/prisma";
-// export type ContactEntity = Contact;
+import { Prisma } from "src/generated/prisma";
 
-// export interface CreateContactDto {
-//     localName: string;
-//     avatar?: string | undefined
-//     contactUserId: number;
-// }
+export type ContactEntity = Contact;
 
-// export interface ContactWithUser {
-//     id: number;
-//     localName: string;
-//     avatar: string | undefined;
-//     ownerId: number;
-//     contactUser: {
-//         username: string;
-//         avatar: string | undefined;
-//     };
-//     createdAt: Date;
-// }
+export type CreateContact = Prisma.ContactUncheckedCreateInput 
 
+export type ContactWithUser = Prisma.ContactGetPayload<{
+	include: {
+		contactUser: {
+			omit: {
+				password: true;
+			};
+		};
+	};
+}>;
 
-// export type Contact = Prisma.ContactGetPayload<{}>
+export type Contact = Prisma.ContactGetPayload<{}>;
