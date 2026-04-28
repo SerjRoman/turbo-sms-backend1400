@@ -92,9 +92,9 @@ export const UserRepository: RepoContract = {
 			throw new InternalServerError();
 		}
 	},
-	findById: function (id: number): Promise<User | null> {
+	findById: function (id) {
 		try {
-			const user = PRISMA_CLIENT.user.findUnique({
+			const user = PRISMA_CLIENT.user.findUniqueOrThrow({
 				where: { id },
 				omit: {
 					password: true,

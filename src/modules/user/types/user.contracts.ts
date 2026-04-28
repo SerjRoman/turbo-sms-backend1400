@@ -22,7 +22,7 @@ export interface UserRepository {
 	findByEmail: (email: string) => Promise<User | null>;
 	findByUsername: (username: string) => Promise<User | null>;
 	findByIdWithPassword: (id: number) => Promise<UserWithPassword | null>;
-	findById: (id: number) => Promise<User | null>;
+	findById: (id: number) => Promise<User>;
 	create: (data: CreateUserPayload) => Promise<User>;
 }
 

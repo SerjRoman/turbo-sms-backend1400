@@ -1,25 +1,24 @@
+import { UserRepository } from "../user/user.repository";
+import { ContactRepository } from "./contact.repository";
 import { ContactsServiceContract } from "./types/contact.contracts";
-import { ContactRepository } from './contact.repository'
-import { BadRequestError } from "@errors/app.errors";
 
 export const ContactsService: ContactsServiceContract = {
+	getAll: async (userId) => {
+		const contacts = await ContactRepository.findAllByOwner(userId);
 
-    async getAll(userId) {
-
-        const contacts = await ContactRepository.findAllByOwner(userId)
-        
-        if (!Array.isArray(contacts)){
-            throw new BadRequestError('pupupu')
-        
-        }
-        return contacts
-    },
-    async getContactById(id, ownerId) {
-        const contract = await ContactRepository.findById(id , ownerId);
-
-        if (!contract) {
-            throw new Error('Contact not found');
-        }
-
-    return contract;
-}
+		return contacts;
+	},
+	getById: async (id, ownerId) => {
+		const contact = await ContactRepository.findById(id, ownerId);
+		return contact;
+	},
+	create: async (data, userId) => {
+		const contactUser = await UserRepository.findById(data.contactUserId);
+		const contact = await ContactRepository.create({
+			...data,
+			avatar: data.avatar || contactUser.avatar,
+			ownerId: userId,
+		});
+		return contact;
+	},
+};

@@ -1,37 +1,39 @@
 import type { NextFunction, Request, Response } from "express";
-import { Contact, CreationDTO, ShortContact, userIdLocals } from "./contact.types";
+import { Contact, ContactWithUser, CreateContact, CreateContactServiceDto } from "./contact.types";
+import { AuthenticatedUser } from "@app-types/token";
 
-
-export interface ContactsControllerContract{
-    getAll: (
-		req: Request<object, Contact[]>,
-		res: Response<Contact[], userIdLocals>,
+export interface ContactsControllerContract {
+	getAll: (
+		req: Request<object, Contact[], object, object, AuthenticatedUser>,
+		res: Response<Contact[], AuthenticatedUser>,
 		next: NextFunction,
 	) => void;
-    getContactById: (
-        req: Request<{id: string}, ShortContact>,
-        res: Response<ShortContact, userIdLocals>,
-        next: NextFunction
-    ) => void;
+	getById: (
+		req: Request<
+			{ id: string },
+			ContactWithUser,
+			object,
+			object,
+			AuthenticatedUser
+		>,
+		res: Response<ContactWithUser, AuthenticatedUser>,
+		next: NextFunction,
+	) => void;
 	create: (
-        req: Request<object, CreationDTO>,
-        res: Response<Contact, userIdLocals>,
-        next: NextFunction
-     ) => void;
+		req: Request<object, CreateContact, CreateContact, object, AuthenticatedUser>,
+		res: Response<Contact, AuthenticatedUser>,
+		next: NextFunction,
+	) => void;
 }
 
-export interface ContactsServiceContract{
+export interface ContactsServiceContract {
 	getAll: (userId: number) => Promise<Contact[]>;
-
-	getContactById:(
-		id: number,
-		ownerId: number
-	)=> Promise<Contact>;
-
-    create: (localName: string) => Promise<Contact>
+	getById: (id: number, ownerId: number) => Promise<ContactWithUser>;
+	create: (data: CreateContactServiceDto, userId: number) => Promise<Contact>;
 }
-export interface ContactsRepositoryContract{
-    findAllByOwner: ( ownerId: number ) => Promise<Contact[]>
-    findById: ( id: number, owner: number ) => Promise<Contact>;
-    create: ( data: CreationDTO ) => Promise<Contact>
+
+export interface ContactsRepositoryContract {
+	findAllByOwner: (ownerId: number) => Promise<Contact[]>;
+	findById: (id: number, ownerId: number) => Promise<ContactWithUser>;
+	create: (data: CreateContact) => Promise<Contact>;
 }
