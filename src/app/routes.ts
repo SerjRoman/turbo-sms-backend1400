@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { UserRouter } from "../modules/user/user.routes";
+import { ContactRouter } from "src/modules/contact/contact.routes";
 
 export const router = Router();
 
@@ -9,4 +10,4 @@ router.get("/health", (req, res) => {
 
 router.use("/users/", UserRouter);
 
-// router.use('/contacts/', ContactRouter, authenticateMiddleware)
+router.use('/contacts/', ContactRouter)

@@ -1,19 +1,27 @@
-// import { Router } from "express";
-// import { authenticateMiddleware } from "@middlewares/authenticate.middleware";
-// import { ContactsController } from "./contact.controller";
+import { Router } from "express";
+import { authenticateMiddleware } from "@middlewares/authenticate.middleware";
+import { ContactsController } from "./contact.controller";
 
 
-// export const ContactRouter = Router();
+export const ContactRouter = Router();
 
-// ContactRouter.get(
-// 	'/all',
-//     ContactsController.getAll
-// );
-// ContactRouter.get(
-//     '',
-//     ContactsController.getContactById
-// );
-// ContactRouter.post(
-//     '/create',
-//     ContactsController.create
-// );
+ContactRouter.get(
+	'/all',
+    authenticateMiddleware,
+    ContactsController.getAll
+);
+ContactRouter.get(
+    '',
+    authenticateMiddleware,
+    ContactsController.getContactById
+);
+ContactRouter.get(
+    '/get-by-username',
+    authenticateMiddleware,
+    ContactsController.getContactByUsername
+)
+ContactRouter.post(
+    '/create',
+    authenticateMiddleware,
+    ContactsController.create
+);
