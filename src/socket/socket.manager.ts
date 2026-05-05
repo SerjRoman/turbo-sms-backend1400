@@ -1,0 +1,29 @@
+import { Server } from "http";
+import { Socket, Server as SocketIOServer } from "socket.io";
+import { AuthenticatedSocket, ServerSocket } from "./socket.types";
+
+export class SocketManagerIO {
+	private ioServer: ServerSocket;
+	constructor(httpServer: Server) {
+		this.ioServer = new SocketIOServer(httpServer, {
+			cors: {
+				origin: "*",
+			},
+		});
+	}
+	initConnection(callback?: (socket: AuthenticatedSocket) => void) {
+		this.ioServer.on("connection", (socket) => {
+			console.log("Socket connected: ", socket.id);
+			callback?.(socket);
+
+			socket.on("disconnect", () => {
+				console.log("Socket disconncted: ", socket.id);
+			});
+		});
+	}
+	useMiddleware(
+		middleware: (socket: Socket, next: (err?: Error) => void) => void,
+	) {
+		this.ioServer.use(middleware);
+	}
+}
