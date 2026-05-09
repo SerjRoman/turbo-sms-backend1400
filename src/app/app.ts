@@ -10,14 +10,27 @@ import {
 import path from "node:path";
 import { createServer } from "node:http";
 import { SocketManagerIO } from "../socket";
+import { ChatSocketController } from "../modules/chat/chat.socket.controller";
 
 const app: Express = express();
 
 const httpServer = createServer(app);
 
 const socketManager = new SocketManagerIO(httpServer);
+
 socketManager.useMiddleware(authenticateSocketMiddleware);
-socketManager.initConnection();
+
+socketManager.initConnection((socket) => {
+	console.log("User joined the room: ", `user_room:${socket.data.userId}`);
+	socket.join(`user_room:${socket.data.userId}`);
+
+	ChatSocketController.registerHandlers(socket);
+
+	socket.on("disconnect", () => {
+		socket.leave(`user_room:${socket.data.userId}`);
+		console.log("User left the room: ", `user_room:${socket.data.userId}`);
+	});
+});
 
 app.use(cors({ origin: "" }));
 app.use(logMiddleware);
