@@ -1,4 +1,5 @@
-import { ChatClientEventsContract } from "../modules/chat/types/chat.contracts";
+import type { MessageClientEvents } from "../modules/message/types/message.contracts";
+import type { ChatClientEventsContract } from "../modules/chat/types/chat.contracts";
 import type {
 	DefaultEventsMap,
 	Socket,
@@ -6,7 +7,8 @@ import type {
 } from "socket.io";
 
 export type AppServerEvents = DefaultEventsMap;
-export interface AppClientEvents extends ChatClientEventsContract {}
+export interface AppClientEvents
+	extends ChatClientEventsContract, MessageClientEvents {}
 
 export interface SocketData {
 	userId: number;
@@ -27,5 +29,8 @@ export type ServerSocket = SocketIOServer<
 >;
 
 export interface SocketController {
-	registerHandlers: (socket: AuthenticatedSocket) => void;
+	registerHandlers: (
+		socket: AuthenticatedSocket,
+		ioServer: ServerSocket,
+	) => void;
 }

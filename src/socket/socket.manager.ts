@@ -11,10 +11,15 @@ export class SocketManagerIO {
 			},
 		});
 	}
-	initConnection(callback?: (socket: AuthenticatedSocket) => void) {
+	initConnection(
+		callback?: (
+			socket: AuthenticatedSocket,
+			ioServer: ServerSocket,
+		) => void,
+	) {
 		this.ioServer.on("connection", (socket) => {
 			console.log("Socket connected: ", socket.id);
-			callback?.(socket);
+			callback?.(socket, this.ioServer);
 
 			socket.on("disconnect", () => {
 				console.log("Socket disconncted: ", socket.id);

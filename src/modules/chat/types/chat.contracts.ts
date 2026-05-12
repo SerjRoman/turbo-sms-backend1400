@@ -1,4 +1,8 @@
-import { JoinChatPayload, LeaveChatPayload } from "./chat.types";
+import type {
+	ChatWithChatParticipants,
+	JoinChatPayload,
+	LeaveChatPayload,
+} from "./chat.types";
 import type {
 	AuthenticatedSocket,
 	SocketController,
@@ -9,6 +13,7 @@ export type JoinChatCallback = (
 ) => void;
 //
 export interface ChatClientEventsContract {
+	// Acknowledgment(ack) - это механизм, которые позволяет клиенту получить ответ от сервера на какое то событие(запрос)
 	joinChat: (data: JoinChatPayload, ack?: JoinChatCallback) => void;
 	leaveChat: (data: LeaveChatPayload) => void;
 }
@@ -24,7 +29,12 @@ export interface ChatSocketControllerContract extends SocketController {
 	leaveChat: (socket: AuthenticatedSocket, data: LeaveChatPayload) => void;
 }
 //
-export interface ChatServiceContract {}
-export interface ChatRepositoryContract {}
-
-// Acknowledgment(ack) - это механизм, которые позволяет клиенту получить ответ от сервера на какое то событие(запрос)
+export interface ChatServiceContract {
+	isChatParticipant: (chatId: number, userId: number) => Promise<boolean>;
+	getChatParticipants: (chatId: number) => Promise<ChatWithChatParticipants>;
+}
+export interface ChatRepositoryContract {
+	getChatParticipants: (
+		chatId: number,
+	) => Promise<ChatWithChatParticipants | null>;
+}

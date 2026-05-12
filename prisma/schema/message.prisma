@@ -7,7 +7,6 @@ model Message {
   senderId Int
   chat     Chat    @relation("messageChat", fields: [chatId], references: [id])
   chatId   Int
-  chatId1  Int
 
   chatAsLastMessage   Chat?    @relation("lastMessage")
   chatAsLastMessageId Int?

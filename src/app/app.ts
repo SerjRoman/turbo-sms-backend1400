@@ -11,6 +11,7 @@ import path from "node:path";
 import { createServer } from "node:http";
 import { SocketManagerIO } from "../socket";
 import { ChatSocketController } from "../modules/chat/chat.socket.controller";
+import { MessageSocketController } from "../modules/message/message.socket.controller";
 
 const app: Express = express();
 
@@ -20,11 +21,12 @@ const socketManager = new SocketManagerIO(httpServer);
 
 socketManager.useMiddleware(authenticateSocketMiddleware);
 
-socketManager.initConnection((socket) => {
+socketManager.initConnection((socket, ioServer) => {
 	console.log("User joined the room: ", `user_room:${socket.data.userId}`);
 	socket.join(`user_room:${socket.data.userId}`);
 
-	ChatSocketController.registerHandlers(socket);
+	ChatSocketController.registerHandlers(socket, ioServer);
+	MessageSocketController.registerHandlers(socket, ioServer);
 
 	socket.on("disconnect", () => {
 		socket.leave(`user_room:${socket.data.userId}`);
