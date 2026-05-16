@@ -5,10 +5,11 @@ import type {
 	Socket,
 	Server as SocketIOServer,
 } from "socket.io";
+import { UserClientEvents } from "../modules/user/types/user.contracts";
 
 export type AppServerEvents = DefaultEventsMap;
 export interface AppClientEvents
-	extends ChatClientEventsContract, MessageClientEvents {}
+	extends ChatClientEventsContract, MessageClientEvents, UserClientEvents {}
 
 export interface SocketData {
 	userId: number;

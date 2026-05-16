@@ -32,9 +32,4 @@ export const MessageRepository: MessageRepositoryContract = {
 		};
 	},
 };
-//
-/*
-    - 200гриvень
-    +200гривень ОШИИИБККАААА
 
-*/

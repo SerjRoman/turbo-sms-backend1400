@@ -13,8 +13,22 @@ import type {
 	SendMessageDto,
 	SendMessagePayload,
 } from "./message.types";
+import { NextFunction, Request, Response } from "express";
+import { AuthenticatedUser } from "@app-types/token";
 
-export interface MessageControllerContract {}
+export interface MessageControllerContract {
+	getAllByChatId(
+		req: Request<
+			{ chatId: number },
+			PaginatedResponse<Message>,
+			object,
+			PaginationParams,
+			AuthenticatedUser
+		>,
+		res: Response<PaginatedResponse<Message>, AuthenticatedUser>,
+		next: NextFunction,
+	): void;
+}
 
 export interface MessageClientEvents {
 	sendMessage: (data: SendMessagePayload) => void;

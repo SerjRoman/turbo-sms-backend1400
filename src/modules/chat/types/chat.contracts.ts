@@ -1,5 +1,8 @@
 import type {
+	Chat,
 	ChatWithChatParticipants,
+	ChatWithParticipantInfo,
+	CreateChatDto,
 	JoinChatPayload,
 	LeaveChatPayload,
 } from "./chat.types";
@@ -32,9 +35,16 @@ export interface ChatSocketControllerContract extends SocketController {
 export interface ChatServiceContract {
 	isChatParticipant: (chatId: number, userId: number) => Promise<boolean>;
 	getChatParticipants: (chatId: number) => Promise<ChatWithChatParticipants>;
+	create(dto: CreateChatDto): Promise<Chat>;
+	getChatsWithParticipantInfo(
+		ownerId: number,
+	): Promise<ChatWithParticipantInfo[]>;
 }
 export interface ChatRepositoryContract {
 	getChatParticipants: (
 		chatId: number,
 	) => Promise<ChatWithChatParticipants | null>;
+	getChatsWithParticipantInfo(
+		ownerId: number,
+	): Promise<ChatWithParticipantInfo[]>;
 }
