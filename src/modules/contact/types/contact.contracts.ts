@@ -1,5 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
-import { Contact, ContactWithUser, CreateContact, CreateContactServiceDto } from "./contact.types";
+import {
+	Contact,
+	ContactWithRelations,
+	ContactWithUser,
+	CreateContact,
+	CreateContactServiceDto,
+} from "./contact.types";
 import { AuthenticatedUser } from "@app-types/token";
 
 export interface ContactsControllerContract {
@@ -20,7 +26,13 @@ export interface ContactsControllerContract {
 		next: NextFunction,
 	) => void;
 	create: (
-		req: Request<object, CreateContact, CreateContact, object, AuthenticatedUser>,
+		req: Request<
+			object,
+			CreateContact,
+			CreateContact,
+			object,
+			AuthenticatedUser
+		>,
 		res: Response<Contact, AuthenticatedUser>,
 		next: NextFunction,
 	) => void;
@@ -36,4 +48,9 @@ export interface ContactsRepositoryContract {
 	findAllByOwner: (ownerId: number) => Promise<Contact[]>;
 	findById: (id: number, ownerId: number) => Promise<ContactWithUser>;
 	create: (data: CreateContact) => Promise<Contact>;
+	// ownerId , contactUserId
+	findByUsersWithRelations: (
+		ownerId: number,
+		contactUserId: number,
+	) => Promise<ContactWithRelations | null>;
 }

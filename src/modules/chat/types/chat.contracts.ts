@@ -1,7 +1,10 @@
+import type { NextFunction, Request, Response } from "express";
+import { AuthenticatedUser } from "@app-types/token";
 import type {
 	Chat,
 	ChatWithChatParticipants,
 	ChatWithParticipantInfo,
+	CreateChat,
 	CreateChatDto,
 	JoinChatPayload,
 	LeaveChatPayload,
@@ -10,6 +13,8 @@ import type {
 	AuthenticatedSocket,
 	SocketController,
 } from "../../../socket/socket.types";
+import { InferType } from "yup";
+import { createChatSchema } from "../chat.schema";
 
 export type JoinChatCallback = (
 	response: { status: "ok" } | { status: "error"; message?: string },
@@ -47,4 +52,30 @@ export interface ChatRepositoryContract {
 	getChatsWithParticipantInfo(
 		ownerId: number,
 	): Promise<ChatWithParticipantInfo[]>;
+	getChatByUsers: (p1: number, p2: number) => Promise<Chat | null>;
+	create: (data: CreateChat) => Promise<Chat>;
+}
+export interface ChatControllerContract {
+	create: (
+		req: Request<
+			object,
+			Chat,
+			InferType<typeof createChatSchema>,
+			object,
+			AuthenticatedUser
+		>,
+		res: Response<Chat, AuthenticatedUser>,
+		next: NextFunction,
+	) => void;
+	getChatsWithParticipantInfo: (
+		req: Request<
+			object,
+			ChatWithParticipantInfo[],
+			object,
+			object,
+			AuthenticatedUser
+		>,
+		res: Response<ChatWithParticipantInfo[], AuthenticatedUser>,
+		next: NextFunction,
+	) => void;
 }

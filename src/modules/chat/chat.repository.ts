@@ -1,6 +1,6 @@
 import { ChatRepositoryContract } from "./types/chat.contracts";
 import { PRISMA_CLIENT } from "@config/client";
-import { ChatWithParticipantInfo } from "./types/chat.types";
+import { Chat, ChatWithParticipantInfo, CreateChat } from "./types/chat.types";
 
 export const ChatRepository: ChatRepositoryContract = {
 	async getChatParticipants(chatId) {
@@ -56,5 +56,26 @@ export const ChatRepository: ChatRepositoryContract = {
 				},
 			},
 		});
+	},
+	getChatByUsers: function (p1: number, p2: number): Promise<Chat | null> {
+		return PRISMA_CLIENT.chat.findFirst({
+			where: {
+				AND: [
+					{
+						participants: {
+							some: { userId: p1 },
+						},
+					},
+					{
+						participants: {
+							some: { userId: p2 },
+						},
+					},
+				],
+			},
+		});
+	},
+	create: function (data: CreateChat): Promise<Chat> {
+		return PRISMA_CLIENT.chat.create({ data });
 	},
 };

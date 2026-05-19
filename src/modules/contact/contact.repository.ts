@@ -7,6 +7,7 @@ import {
 	InternalServerError,
 	NotFoundError,
 } from "@errors/app.errors";
+import { ContactWithRelations } from "./types/contact.types";
 
 export const ContactRepository: ContactsRepositoryContract = {
 	async findAllByOwner(ownerId) {
@@ -60,5 +61,30 @@ export const ContactRepository: ContactsRepositoryContract = {
 			}
 			throw new InternalServerError();
 		}
+	},
+	findByUsersWithRelations: function (
+		ownerId: number,
+		contactUserId: number,
+	): Promise<ContactWithRelations | null> {
+		return Client.contact.findUnique({
+			where: {
+				contactUserId_ownerId: {
+					ownerId,
+					contactUserId,
+				},
+			},
+			include: {
+				contactUser: {
+					omit: {
+						password: true,
+					},
+				},
+				owner: {
+					omit: {
+						password: true,
+					},
+				},
+			},
+		});
 	},
 };

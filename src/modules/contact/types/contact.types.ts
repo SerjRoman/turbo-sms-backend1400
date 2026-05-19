@@ -24,3 +24,18 @@ export type ContactWithUser = Prisma.ContactGetPayload<{
 		};
 	};
 }>;
+
+export type ContactWithRelations = Prisma.ContactGetPayload<{
+	include: {
+		contactUser: {
+			omit: {
+				password: true;
+			};
+		};
+		owner: {
+			omit: {
+				password: true;
+			};
+		};
+	};
+}>;
