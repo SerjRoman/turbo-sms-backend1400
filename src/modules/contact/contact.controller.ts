@@ -30,6 +30,7 @@ export const ContactsController: ContactsControllerContract = {
 	},
 	create: async (req, res, next) => {
 		try {
+			console.log(req.file);
 			const contact = await ContactsService.create(
 				{
 					...req.body,
