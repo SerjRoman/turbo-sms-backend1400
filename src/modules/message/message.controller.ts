@@ -1,9 +1,15 @@
-import { PaginatedResponse, PaginationParams } from "@app-types/pagination";
+import {
+	PaginatedResponse,
+	PaginationParams,
+	PaginationSchema,
+} from "@app-types/pagination";
 import { AuthenticatedUser } from "@app-types/token";
 import { NextFunction, Request, Response } from "express";
 import { MessageControllerContract } from "./types/message.contracts";
 import { Message } from "./types/message.types";
 import { MessageService } from "./message.service";
+import * as yup from "yup";
+import { getMessageSchema } from "./message.schema";
 
 export const MessageController: MessageControllerContract = {
 	getAllByChatId: async function (
@@ -18,12 +24,17 @@ export const MessageController: MessageControllerContract = {
 		next: NextFunction,
 	): Promise<void> {
 		try {
-			res.status(200).json(
-				await MessageService.getAllByChatId(req.params.chatId, {
-					page: req.query.page,
-					take: req.query.take,
-				}),
-			);
+			const paginationParams = await PaginationSchema.validate({
+				page: req.query.page,
+				take: req.query.take,
+			});
+			const params = await getMessageSchema.validate(req.params);
+			const data = await MessageService.getAllByChatId(params.chatId, {
+				page: paginationParams.page,
+				take: paginationParams.take,
+			});
+			console.log(data);
+			res.status(200).json(data);
 		} catch (error) {
 			next(error);
 		}

@@ -21,6 +21,7 @@ export const MessageRepository: MessageRepositoryContract = {
 			where: { chatId },
 			take: pagination.take,
 			skip: pagination.take * (pagination.page - 1),
+            orderBy: { createdAt: "desc" },
 		});
 		const count = await PRISMA_CLIENT.message.count();
 		return {
