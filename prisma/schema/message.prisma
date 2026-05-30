@@ -2,7 +2,7 @@ model Message {
   id       Int     @id @default(autoincrement())
   type     String
   text     String?
-  mediaUrl String?
+  media String?
   sender   User    @relation("senderMessages", fields: [senderId], references: [id])
   senderId Int
   chat     Chat    @relation("messageChat", fields: [chatId], references: [id])

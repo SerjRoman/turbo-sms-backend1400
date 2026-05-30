@@ -8,7 +8,6 @@ import { NextFunction, Request, Response } from "express";
 import { MessageControllerContract } from "./types/message.contracts";
 import { Message } from "./types/message.types";
 import { MessageService } from "./message.service";
-import * as yup from "yup";
 import { getMessageSchema } from "./message.schema";
 
 export const MessageController: MessageControllerContract = {
@@ -35,6 +34,18 @@ export const MessageController: MessageControllerContract = {
 			});
 			console.log(data);
 			res.status(200).json(data);
+		} catch (error) {
+			next(error);
+		}
+	},
+	async uploadMessageMedia(req, res, next) {
+		try {
+			const file = req.file;
+			if (!file?.filename) {
+				res.status(404).json({ message: "File is not found!" });
+				return;
+			}
+			res.status(200).json({ media: file.filename });
 		} catch (error) {
 			next(error);
 		}

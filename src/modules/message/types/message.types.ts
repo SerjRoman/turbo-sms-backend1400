@@ -5,16 +5,16 @@ export type Message = Prisma.MessageGetPayload<{}>;
 export type MessageCreate = Prisma.MessageUncheckedCreateInput;
 
 export type SendMessageDto = {
-	type: "text" | "image";
+	type: "text" | "media";
 	text?: string | null;
-	mediaUrl?: string | null;
+	media?: string | null;
 	senderId: number;
 	chatId: number;
 };
 
 export type SendMessagePayload = {
-	type: "text" | "image";
+	type: "text" | "media";
 	text?: string | null;
-	mediaUrl?: string | null;
+	media?: string | null;
 	chatId: number;
 };

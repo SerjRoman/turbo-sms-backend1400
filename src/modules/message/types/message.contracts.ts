@@ -28,6 +28,20 @@ export interface MessageControllerContract {
 		res: Response<PaginatedResponse<Message>, AuthenticatedUser>,
 		next: NextFunction,
 	): void;
+	uploadMessageMedia(
+		req: Request<
+			object,
+			{ media: string } | { message: string },
+			object,
+			object,
+			AuthenticatedUser
+		>,
+		res: Response<
+			{ media: string } | { message: string },
+			AuthenticatedUser
+		>,
+		next: NextFunction,
+	): void;
 }
 
 export interface MessageClientEvents {
