@@ -7,8 +7,10 @@ import type {
 	MeDTO,
 	RegisterCredentials,
 	RegisterDto,
+	SubscribeAndGetInitialStatusesAcknowlegment,
 	TokenDTO,
 	User,
+	UserStatus,
 	UserWithPassword,
 } from "./user.types";
 import { AuthenticatedUser } from "@app-types/token";
@@ -66,8 +68,14 @@ export interface UserClientEvents {
 		userIds: number[],
 		ack?: GetOnlineUsersAcknowlegment,
 	) => void;
+	subscribeAndGetInitialStatuses: (
+		userIds: number[],
+		ack?: SubscribeAndGetInitialStatusesAcknowlegment,
+	) => void;
 }
-
+export interface UserServerEvents {
+	userStatusUpdated: (status: UserStatus) => void;
+}
 export interface UserSocketControllerContract extends SocketController {
 	getOnlineUsers: (
 		ioServer: ServerSocket,
@@ -76,4 +84,16 @@ export interface UserSocketControllerContract extends SocketController {
 		ack?: GetOnlineUsersAcknowlegment,
 	) => void;
 	isUserOnline: (ioServer: ServerSocket, id: number) => boolean;
+	subscriptions: Map<number, Set<number>>;
+	subscribeAndGetInitialStatuses: (
+		ioServer: ServerSocket,
+		socket: AuthenticatedSocket,
+		userIds: number[],
+		ack?: SubscribeAndGetInitialStatusesAcknowlegment,
+	) => void;
+	notifySubscribers: (
+		ioServer: ServerSocket,
+		userId: number,
+		newStatus: "online" | "offline",
+	) => void;
 }

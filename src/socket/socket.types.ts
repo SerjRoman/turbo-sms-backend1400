@@ -1,13 +1,12 @@
 import type { MessageClientEvents } from "../modules/message/types/message.contracts";
 import type { ChatClientEventsContract } from "../modules/chat/types/chat.contracts";
-import type {
-	DefaultEventsMap,
-	Socket,
-	Server as SocketIOServer,
-} from "socket.io";
-import { UserClientEvents } from "../modules/user/types/user.contracts";
+import type { Socket, Server as SocketIOServer } from "socket.io";
+import {
+	UserClientEvents,
+	UserServerEvents,
+} from "../modules/user/types/user.contracts";
 
-export type AppServerEvents = DefaultEventsMap;
+export interface AppServerEvents extends UserServerEvents {}
 export interface AppClientEvents
 	extends ChatClientEventsContract, MessageClientEvents, UserClientEvents {}
 
