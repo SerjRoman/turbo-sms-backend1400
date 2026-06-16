@@ -55,4 +55,10 @@ export const ChatService: ChatServiceContract = {
 	): Promise<ChatWithParticipantInfo[]> {
 		return ChatRepository.getChatsWithParticipantInfo(ownerId);
 	},
+	getChatWithParticipantInfo: function (
+		chatId: number,
+		ownerId: number,
+	): Promise<ChatWithParticipantInfo | null> {
+		return ChatRepository.getChatWithParticipantInfo(chatId, ownerId);
+	},
 };

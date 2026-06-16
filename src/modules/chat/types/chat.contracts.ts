@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { AuthenticatedUser } from "@app-types/token";
 import type {
 	Chat,
+	ChatUpdatePayload,
 	ChatWithChatParticipants,
 	ChatWithParticipantInfo,
 	CreateChat,
@@ -11,6 +12,7 @@ import type {
 } from "./chat.types";
 import type {
 	AuthenticatedSocket,
+	ServerSocket,
 	SocketController,
 } from "../../../socket/socket.types";
 import { InferType } from "yup";
@@ -26,7 +28,9 @@ export interface ChatClientEventsContract {
 	leaveChat: (data: LeaveChatPayload) => void;
 }
 
-export interface ChatServerEventsContract {}
+export interface ChatServerEvents {
+	chatUpdate: (data: ChatUpdatePayload) => void;
+}
 
 export interface ChatSocketControllerContract extends SocketController {
 	joinChat: (
@@ -35,6 +39,11 @@ export interface ChatSocketControllerContract extends SocketController {
 		ack?: JoinChatCallback,
 	) => void;
 	leaveChat: (socket: AuthenticatedSocket, data: LeaveChatPayload) => void;
+	chatUpdate: (
+		ioServer: ServerSocket,
+		socket: AuthenticatedSocket,
+		data: { chatId: number },
+	) => void;
 }
 //
 export interface ChatServiceContract {
@@ -44,6 +53,10 @@ export interface ChatServiceContract {
 	getChatsWithParticipantInfo(
 		ownerId: number,
 	): Promise<ChatWithParticipantInfo[]>;
+	getChatWithParticipantInfo(
+		chatId: number,
+		ownerId: number,
+	): Promise<ChatWithParticipantInfo | null>;
 }
 export interface ChatRepositoryContract {
 	getChatParticipants: (
@@ -52,6 +65,10 @@ export interface ChatRepositoryContract {
 	getChatsWithParticipantInfo(
 		ownerId: number,
 	): Promise<ChatWithParticipantInfo[]>;
+	getChatWithParticipantInfo(
+		chatId: number,
+		ownerId: number,
+	): Promise<ChatWithParticipantInfo | null>;
 	getChatByUsers: (p1: number, p2: number) => Promise<Chat | null>;
 	create: (data: CreateChat) => Promise<Chat>;
 }

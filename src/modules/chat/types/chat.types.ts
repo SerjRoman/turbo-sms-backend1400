@@ -39,7 +39,16 @@ export type ChatWithParticipantInfo = Prisma.ChatGetPayload<{
 		};
 	};
 }>;
+export type ChatWithLastMessage = Prisma.ChatGetPayload<{
+	include: {
+		lastMessage: true;
+	};
+}>;
 
+export type ChatUpdatePayload = ChatWithLastMessage & {
+	senderId: number;
+	senderFullname: string;
+};
 export type CreateChatDto = {
 	contactUserId: number;
 	ownerId: number;

@@ -5,8 +5,7 @@ import {
 	SubscribeAndGetInitialStatusesAcknowlegment,
 	UserStatus,
 } from "./types/user.types";
-
-const USER_ROOM_PREFIX = "user_room:";
+import { USER_ROOM_PREFIX } from "./user.constants";
 
 export const UserSocketController: UserSocketControllerContract = {
 	getOnlineUsers: function (

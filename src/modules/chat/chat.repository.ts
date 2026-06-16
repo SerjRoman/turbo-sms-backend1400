@@ -78,4 +78,48 @@ export const ChatRepository: ChatRepositoryContract = {
 	create: function (data: CreateChat): Promise<Chat> {
 		return PRISMA_CLIENT.chat.create({ data });
 	},
+	getChatWithParticipantInfo: function (
+		chatId: number,
+		ownerId: number,
+	): Promise<ChatWithParticipantInfo | null> {
+		return PRISMA_CLIENT.chat.findUnique({
+			where: {
+				id: chatId,
+			},
+			include: {
+				lastMessage: true,
+				participants: {
+					include: {
+						user: {
+							select: {
+								name: true,
+								id: true,
+								surname: true,
+								avatar: true,
+								contactOf: {
+									where: {
+										ownerId: ownerId,
+									},
+									select: {
+										id: true,
+										localName: true,
+										avatar: true,
+										addedAt: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		});
+	},
+	getContactInfoByUserAndOwnerIds: async (userId, ownerId) => {
+		return await PRISMA_CLIENT.contact.findFirst({
+			where: {
+				contactUserId: userId,
+				ownerId
+			}
+		})
+	}
 };
